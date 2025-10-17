@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8" />
+    <title>example</title>
+</head>
+
+<body>
+    <script type="module">
+        import init, { encode, decode } from "./pkg/web/base64_simd_wasm_vn.js";
+
+        const encoder = new TextEncoder();
+        const decoder = new TextDecoder();
+
+        init().then(() => {
+            const data = "SIMD-accelerated base64 encoding and decoding"
+
+            const encoded = encode(encoder.encode(data));
+            const decoded = decode(encoded);
+
+            console.log("data: ", data);
+            console.log("encode: ", encoded);
+            console.log("decode: ", decoded);
+
+            const text = decoder.decode(decoded)
+
+            console.log("text: ", text);
+
+            if (data === text) {
+                console.log('Ok !');
+            }
+        });
+    </script>
+</body>
+
+</html>
