@@ -48,7 +48,7 @@ dependencies = [
 
 [[package]]
 name = "base64-simd-wasm-vn"
-version = "1.0.0"
+version = "1.1.0"
 dependencies = [
  "alloc_cat",
  "base64-simd",

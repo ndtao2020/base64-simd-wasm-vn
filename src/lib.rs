@@ -52,6 +52,58 @@ pub fn decode_url_no_pad(str: &str) -> Result<Vec<u8>, JsValue> {
         .map_err(|e| JsValue::from_str(&e.to_string()))
 }
 
+#[wasm_bindgen]
+pub struct Base64 {}
+
+#[wasm_bindgen]
+impl Base64 {
+    #[wasm_bindgen(js_name = encode)]
+    pub fn encode(data: &[u8]) -> String {
+        encode(data)
+    }
+
+    #[wasm_bindgen(js_name = decode)]
+    pub fn decode(str: &str) -> Result<Vec<u8>, JsValue> {
+        decode(str)
+    }
+
+    #[wasm_bindgen(js_name = encodeNoPad)]
+    pub fn encode_no_pad(data: &[u8]) -> String {
+        encode_no_pad(data)
+    }
+
+    #[wasm_bindgen(js_name = decodeNoPad)]
+    pub fn decode_no_pad(str: &str) -> Result<Vec<u8>, JsValue> {
+        decode_no_pad(str)
+    }
+}
+
+#[wasm_bindgen]
+pub struct Base64Url {}
+
+#[wasm_bindgen]
+impl Base64Url {
+    #[wasm_bindgen(js_name = encode)]
+    pub fn encode(data: &[u8]) -> String {
+        encode_url(data)
+    }
+
+    #[wasm_bindgen(js_name = decode)]
+    pub fn decode(str: &str) -> Result<Vec<u8>, JsValue> {
+        decode_url(str)
+    }
+
+    #[wasm_bindgen(js_name = encodeNoPad)]
+    pub fn encode_no_pad(data: &[u8]) -> String {
+        encode_url_no_pad(data)
+    }
+
+    #[wasm_bindgen(js_name = decodeNoPad)]
+    pub fn decode_no_pad(str: &str) -> Result<Vec<u8>, JsValue> {
+        decode_url_no_pad(str)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

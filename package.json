@@ -5,7 +5,7 @@
         "ndtao2020"
     ],
     "description": "Base64 SIMD for WebAssembly",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "license": "MIT License",
     "repository": {
         "type": "git",
@@ -14,6 +14,9 @@
     "files": [
         "web/",
         "deno/",
+        "esm/",
+        "module/",
+        "no-modules/",
         "nodejs/",
         "bundler/"
     ],
@@ -32,6 +35,21 @@
             "types": "./deno/base64_simd_wasm_vn.d.ts",
             "require": "./deno/base64_simd_wasm_vn.js",
             "import": "./deno/base64_simd_wasm_vn.js"
+        },
+        "./esm": {
+            "types": "./esm/base64_simd_wasm_vn.d.ts",
+            "require": "./esm/base64_simd_wasm_vn.js",
+            "import": "./esm/base64_simd_wasm_vn.js"
+        },
+        "./module": {
+            "types": "./module/base64_simd_wasm_vn.d.ts",
+            "require": "./module/base64_simd_wasm_vn.js",
+            "import": "./module/base64_simd_wasm_vn.js"
+        },
+        "./no-modules": {
+            "types": "./no-modules/base64_simd_wasm_vn.d.ts",
+            "require": "./no-modules/base64_simd_wasm_vn.js",
+            "import": "./no-modules/base64_simd_wasm_vn.js"
         },
         "./nodejs": {
             "types": "./nodejs/base64_simd_wasm_vn.d.ts",
