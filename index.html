@@ -8,29 +8,61 @@
 
 <body>
     <script type="module">
-        import init, { encode, decode } from "./pkg/web/base64_simd_wasm_vn.js";
+        import { Bench } from 'https://cdn.jsdelivr.net/npm/tinybench@6.0.0/dist/index.min.js'
+        import init, { encode, decode, encodeUrlNoPad, decodeUrlNoPad } from "./pkg/web/base64_simd_wasm_vn.js";
 
-        const encoder = new TextEncoder();
-        const decoder = new TextDecoder();
+        const dataTXT = `
+        To find information about a command, on the A-Z button menu at the top of this page, click the letter that the command starts with, and then click the command name.
+        In addition to the tools installed with Windows XP, there are over 40 support tools included on the Windows XP CD. You can use these tools to diagnose and resolve computer problems. 
+        For more information about these support tools, see Windows Support Tools For information about installing support tools, see Install Windows Support Tools
+        For more information about changes to the functionality of MS-DOS commands, new command-line tools, command shell functionality, configuring the command prompt, 
+        and automating commmand-line tasks, see Command-line reference
+        Some command-line tools require the user to have administrator-level privileges on source and/or target computers.
+        Command-line tools must be run at the prompt of the Cmd.exe command interpreter. To open Command Prompt, click Start, click Run, type cmd, 
+        and then click OK. To view help at the command-line, at the command prompt, type the following
+        We're no longer updating this content regularly. Check the Microsoft Product Lifecycle for information about how this product, service, technology, or API is supported.
+        `;
+        const dataBytes = new TextEncoder().encode(dataTXT);
 
-        init().then(() => {
-            const data = "SIMD-accelerated base64 encoding and decoding"
+        // --- Init WASM once ---
+        await init()
 
-            const encoded = encode(encoder.encode(data));
-            const decoded = decode(encoded);
+        // Tests
+        const encoded = encode(dataBytes);
+        const decoded = decode(encoded);
 
-            console.log("data: ", data);
-            console.log("encode: ", encoded);
-            console.log("decode: ", decoded);
+        console.log("data: ", dataTXT);
+        console.log("encode-simd: ", encoded);
+        console.log("decode-simd: ", decoded);
+        console.log("encode-web: ", btoa(dataTXT));
+        console.log("decode-web: ", atob(encoded));
 
-            const text = decoder.decode(decoded)
+        console.assert(new TextDecoder().decode(decoded) === dataTXT, "Base64 decode failed");
 
-            console.log("text: ", text);
+        const encodedUrlNoPad = encodeUrlNoPad(dataBytes);
+        const decodedUrlNoPad = decodeUrlNoPad(encodedUrlNoPad);
 
-            if (data === text) {
-                console.log('Ok !');
-            }
-        });
+        // --- Benchmark ---
+        const bench = new Bench({
+            name: 'base64 benchmark',
+            time: 200,
+        })
+
+        bench
+            // STANDARD BASE64
+            .add('base64-simd-wasm-vn encode', () => encode(dataBytes))
+            .add('browser btoa encode', () => btoa(dataTXT))
+            .add('base64-simd-wasm-vn decode', () => decode(encoded))
+            .add('browser atob decode', () => atob(encoded))
+            // BASE64 URL (NO PAD)
+            .add('base64-simd-wasm-vn encodeUrlNoPad', () => encodeUrlNoPad(dataBytes))
+            .add('base64-simd-wasm-vn decodeUrlNoPad', () => decodeUrlNoPad(encodedUrlNoPad));
+
+        await bench.run()
+
+        console.log(bench.name)
+        console.table(bench.table())
+
     </script>
 </body>
 
